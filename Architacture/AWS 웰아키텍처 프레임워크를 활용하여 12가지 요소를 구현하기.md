@@ -9,7 +9,7 @@
 
 ## 2. AWS WAF 6대 핵심 요소와 12-Factor 매핑
 
-![12-Factor 매핑](./image/12-Factor_app.png)
+![12-Factor 매핑](<../image/12-Factor_app.png>)
 
 ### 2.1 운영 우수성 (Operational Excellence)
 
