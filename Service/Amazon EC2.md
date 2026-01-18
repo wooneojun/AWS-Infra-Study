@@ -2,7 +2,7 @@
 
 ## 1. 이름 및 태그 (Name & Tags)
 
-![Name&Tags](./Service_image/1. 이름 및 태그.png)
+![Name&Tags](./Service_image/01_name_tags.png)
 
 인스턴스의 식별과 관리를 위한 가장 기초적인 단계입니다.
 
