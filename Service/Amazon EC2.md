@@ -1,7 +1,8 @@
 #  AWS EC2 인스턴스 시작 및 구성 가이드
 
 ## 1. 이름 및 태그 (Name & Tags)
-![Name&Tags](Service/Service_image/1. 이름 및 태그.png)
+
+![Name&Tags](./Service_image/1. 이름 및 태그.png)
 
 인스턴스의 식별과 관리를 위한 가장 기초적인 단계입니다.
 
@@ -18,7 +19,7 @@
 ---
 
 ## 2. 애플리케이션 및 OS 이미지 (AMI)
-![AMI](Service/Service_image/2. AMI.png)
+![AMI](./Service_image/2. AMI.png)
 
 인스턴스의 기반이 되는 운영체제와 소프트웨어 구성을 선택합니다.
 
@@ -36,7 +37,7 @@
 ---
 
 ## 3. 인스턴스 유형 및 키 페어 (Instance Type & Key Pair)
-![인스턴스](Service/Service_image/4. 인스턴스 유형.png)
+![인스턴스](./Service_image/4. 인스턴스 유형.png)
 
 ### 인스턴스 유형 선택
 
@@ -46,10 +47,10 @@
 * **t3.micro:** 테스트용으로 많이 쓰이는 사양으로, 크레딧 기반의 성능 폭발이 가능합니다.
 
 ### 키 페어 (로그인)
-![키페어](Service/Service_image/5. 키페어.png)
+![키페어](./Service_image/5. 키페어.png)
 
 인스턴스에 원격으로 안전하게 접속하기 위한 인증 수단입니다.
-![키페어생성](Service/Service_image/6. 키페어 생성.png)
+![키페어생성](./Service_image/6. 키페어 생성.png)
 * **암호화 알고리즘:**
 * **RSA:** 오래된 표준으로 호환성이 가장 뛰어납니다. (2048비트 이상 권장)
 * **ED25519:** 타원곡선 암호화 기반으로 속도가 빠르고 작은 키 사이즈로도 강력한 보안을 자랑합니다.
@@ -64,8 +65,8 @@
 ---
 
 ## 4. 네트워크 설정 (VPC & 보안 그룹)
-![vpc1](Service/Service_image/7-1. VPC.png)
-![vpc2](Service/Service_image/7-2. VPC.png)
+![vpc1](./Service_image/7-1. VPC.png)
+![vpc2](./Service_image/7-2. VPC.png)
 네트워크 인프라와 보안 규칙을 정의합니다.
 
 * **VPC 및 서브넷:** 인스턴스가 위치할 가상 네트워크와 가용 영역을 지정합니다.
@@ -79,7 +80,7 @@
 ---
 
 ## 5. 스토리지 구성 (EBS & EFS)
-![EBS](Service/Service_image/8. EBS & EFS.png)
+![EBS](./Service_image/8. EBS & EFS.png)
 데이터 저장 공간을 설정합니다. EC2의 기본 인스턴스 스토어는 휘발성이므로, 영구 보존이 필요한 데이터는 반드시 EBS를 사용해야 합니다.
 
 ### EBS (Elastic Block Store) 특징
