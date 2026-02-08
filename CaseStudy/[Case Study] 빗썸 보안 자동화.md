@@ -18,7 +18,7 @@
         4. **Parameter Store**(설정값 저장소)
             1. DB 비밀번호, API 키 , 환경 변수 같은 민감한 정보를 안전하게 저장하고 관리
             2. Secrets Manager와의 차이
-                1. 단순 설정값이나 무료로 쓰고 싶을대는 Parameter Store를 비밀번호 자동 교체(Rotation이 필요할 때는 Secrets Manager를 사용한다.
+                1. 단순 설정값이나 무료로 쓰고 싶을대는 Parameter Store를 비밀번호 자동 교체(Rotation이 필요할 때는 Secrets Manager를 사용한다.)
             3. 계층구조 : /prod/db/password 같은 경로 형태로 관리할 수 있어 관리가 편하다.
         5. **Automation**(워크플로 자동화)
             1. 여러 단계의 복잡한 작업을 하나의 런북으로 만들어 자동화
@@ -33,7 +33,7 @@
 - 인프라에 대한 구성 변경 없이 취약점 점검을 수행할 수 있어야 한다.
 - 보안 컴플라이언스의 요구사항이 변경될 경우, 스크립트를 유연하게 수정할 수 있어야 한다.
 
-![image.png](attachment:a0b3eafb-5939-48f5-b948-258fce119b13:image.png)
+![image.png](../image/Service_image/빗썸1.png)
 
 AWS Control Tower 서비스를 사용해 다수의 맴버계정을 관리하고 있는 환경에서 각 계정 내 존재하는 EC2 인스턴스에 취약점 점검을 실행하기 위한 아키텍처 다이어그램
 
@@ -75,7 +75,7 @@ AWS Control Tower 서비스를 사용해 다수의 맴버계정을 관리하고 
 
 ## 2. SecurityHub 조사 결과를 통한 Systems Manager 연동 누락된 인스턴스 가시화
 
-![image.png](attachment:9c0102ff-735c-4f75-b9c8-7c7b09e1442a:image.png)
+![image.png](../image/Service_image/빗썸2.png)
 
 - AWS Security Hub를 통해 계정별 모든 EC2 인스턴스 대상으로 SSM 연결에 대한 규정준수 여부를 확인하고 중앙 계정에 결과를 집계해 사내 모든 인스턴스에 대한 SSM 연동 상태를 가시화
 - 자체 제작된 AMI 를 통해 구동되는 인스턴스는 기본적으로 SSM 에이전트가 설치돼있지 않았다
@@ -106,6 +106,7 @@ AWS Control Tower 서비스를 사용해 다수의 맴버계정을 관리하고 
     - 오토스케일링되는 인스턴스 갯수가 많고 자동화가 자주 트리거되는 환경에서는 비용이 커질 수 있어 자체적으로 IAM 정책 부여를 자동화하는 방안을 선택
 - 자동화같은 스케줄 방식이 아닌 Amazon EventBridge의 이벤트 기반으로 모든 인스턴스에 SSM 관련 IAM 역할 및 정책을 할당해줄 수 있는 효율적인 아키텍처를 구성
     - 다중 계정 환경에서 중앙 집중적으로 구성하기 위해 AWS Control Tower와 함께 배포되는 자원들을 사용하기로 함
+    ![이미지](../image/Service_image/빗썸3.png)
     - 각 계정마다 `aws-controltower-SecurityNotifications` 이름을 가지는 SNS 주제와 `aws-controltower-NotificationForwarder` Lambda 함수가 존재
 - 해당 Lambda 함수는 SNS 주제를 구독하고 있으며, 메세지 인입 시 Audit 계정의 `aws-controltower-AggregateSecurityNotification` SNS 주제로 포워딩해주는 역할을 함
 - 위의 흐름에 따라 Audit 계정의 SNS 주제로 맴버 계정의 모든 이벤트가 모이게 됨
@@ -171,7 +172,7 @@ module "eventbridge-ec2-iam-profile-change" {
 - 이렇게 캡쳐한 이벤트는 앞서 설명한 흐름에 따라 Audit 계정의 SNS 주제로 모이고, 이 SNS 주제를 구독하여 모인 이벤트를 처리하는 `SSM-Role-Controller` Lambda 함수를 통해 처리됨
 - 결과적으로 실시간으로 발생하는 이벤트를 캡쳐하고 이를 트리거로 Lambda 함수에서 IAM 역할과 정책을 EC2 인스턴스에 연결시키면서 운영중인 모든 인스턴스에 SSM 관련 권한이 빠짐없이 연결되는 환경 구성
 
-![image.png](attachment:62b09fca-0c5c-4cca-a9e2-9b5bff98d95f:image.png)
+![image.png](../image/Service_image/빗썸4.png)
 
 - 다음은 EC2 에 새로운 인스턴스 프로필이 연결되는 이벤트가 확인되었을 때, SSM 동작에 필요한 정책이 부여되어 있는지 검증하고 누락된 경우 할당해주는 코드
 - 이 코드에서는 EventBridge 를 통해 캡쳐한 이벤트의 AccountID 필드 정보를 확인하여 해당 계정에 배치한 알려진 IAM 역할의 권한을 얻어 정책 연결 작업을 수행
