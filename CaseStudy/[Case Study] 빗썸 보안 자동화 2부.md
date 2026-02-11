@@ -225,7 +225,7 @@ print(url)
         func GetDefaultClient(ctx context.Context, accountID string) (*SSMClient, error) {
         	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion(TargetRegion), config.WithRetryer(func() aws.Retryer {
         		return retry.NewStandard(func(o *retry.StandardOptions) {
-        			o.RateLimiter = ratelimit.NewTokenRateLimit(20)
+        			o.RateLimiter = ratelimit.NewTokenRateLimit(20)// 쓰로틀링 방지용 rate limit
         			o.RetryCost = 1
         			o.RetryTimeoutCost = 3
         			o.NoRetryIncrement = 10
@@ -236,11 +236,12 @@ print(url)
         		return nil, err
         	}
         
-        	stsClient := sts.NewFromConfig(cfg)
-        	creds := stscreds.NewAssumeRoleProvider(stsClient, fmt.Sprintf(AssumeRoleARN, accountID, AssumeRoleName))
+        	stsClient := sts.NewFromConfig(cfg)// AWS 보안 토큰 서비스(STS) 호출
+        	creds := stscreds.NewAssumeRoleProvider(stsClient, fmt.Sprintf(AssumeRoleARN, accountID, AssumeRoleName)) // 다른 계정 열쇠 빌리기
+          cfg.Credentials = aws.NewCredentialsCache(creds) // 임시 신분증 보관
         	cfg.Credentials = aws.NewCredentialsCache(creds)
         
-        	ssmClient := ssm.NewFromConfig(cfg)
+        	ssmClient := ssm.NewFromConfig(cfg)// 리모컨 완성
         
         	return &SSMClient{ssmClient}, nil
         }
